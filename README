@@ -1,0 +1,28 @@
+General:
+- Enable/disable components by (un)checking the correcsonding checkbox. This can be done during Play mode as well.
+- Awake() is called before any Start().
+
+Interactive Canvas (canvas for book content):
+- Can be disabled during editting since it is blocking everything, but don't forget to enabled it to play or error will be thrown.
+- The text file for the book content will not be set here, but instead in the InteractiveObject component under InteractiveGameObject.
+
+Canvas: 
+- For canvas to be detected by the gazer, add component Box Collider to the canvas and need to edit the collider (by pressing Edit Collider) so that the collider matches to the shape of the canvas (set z to 1).
+- To manipulate the transparency of canvas in the script, add component Canvas Group to the canvas. (Follow the component setting of HintCanvas under PopUpGameObject).
+- The default render mode of canvas will make it stick to player's perception. To avoid this, set the render mode to World Space.
+
+Script:
+- To use button click event listener, add Event Trigger to the game object which has the script. Follow the setting event trigger of InteractiveCanvas.
+
+Raycast Object (script for objects that will be detected by the gazer):
+- In Component section, set the Text File field to the txt file whose text will be shown in the game object's hintbox.
+
+Interactive Object (script for objects which has detailed content that can be read by click action, such as book):
+- In Component section, set the Text File field to the txt file whose text will be shown in the game object's hintbox.
+- In Component section, set the Interactive Text File field to the txt file whose text will be the detailed text content and shown in the interactive canvas.
+
+Text file:
+- @ is used as the token to split the text to multiple pages.
+
+
+

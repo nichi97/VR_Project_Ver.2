@@ -1,6 +1,0 @@
-Seems to be a book...?
-
-(Click button to examine)
-@It is a diary
-
-(Click button to go back)

@@ -1,0 +1,6 @@
+Seems to be a book...?
+
+(Click button to examine)
+@It is a diary. It's not locked...
+
+(Click button to read the diary)
