@@ -4,6 +4,7 @@ General:
 
 Interactive Canvas (canvas for book content):
 - Can be disabled during editting since it is blocking everything, but don't forget to enabled it to play or error will be thrown.
+(*** However, other canvas can be disabled when starting the game. This is probably due to Find() function. If the game object is found through transform.Find(), it can be disabled; otherwise found by GameObject.Find(), have to enable it.)
 - The text file for the book content will not be set here, but instead in the InteractiveObject component under InteractiveGameObject.
 
 Canvas: 
@@ -21,6 +22,8 @@ Interactive Object (script for objects which has detailed content that can be re
 - In Component section, set the Text File field to the txt file whose text will be shown in the game object's hintbox.
 - In Component section, set the Interactive Text File field to the txt file whose text will be the detailed text content and shown in the interactive canvas.
 
+Keypad:
+- Can change the answer in the component of keypad under keypadGameObject.
 Text file:
 - @ is used as the token to split the text to multiple pages.
 

@@ -21,13 +21,11 @@ public class RaycastObject : MonoBehaviour {
     //for raycast
     public void OnRaycastEnter(RaycastHit hitInfo)
     {
-        Debug.LogFormat("Raycast entered on {0}", gameObject.name);
 		hitTimeLength = 0;
     }
     //for raycast
     public void OnRayCast(RaycastHit hitInfo)
     {   
-        Debug.LogFormat("Raycast stayed on {0}", gameObject.name);
 		if (canvas.activeInHierarchy) //if the hintbox is disappearing
 			TurnOnMessage();
 		else {
@@ -48,15 +46,12 @@ public class RaycastObject : MonoBehaviour {
     //for raycast
     public void OnRaycastExit()
     {
-        Debug.LogFormat("Raycast exited on {0}", gameObject.name);
         TurnOffMessage();
     }
 
 
-    protected void Start()
+    public virtual void Start()
     {
-        Debug.LogFormat("Hello {0}", this.name);
-
 		//for hintBox
 		canvas = this.transform.Find("HintCanvas").gameObject;
         cg = canvas.GetComponent<CanvasGroup>();

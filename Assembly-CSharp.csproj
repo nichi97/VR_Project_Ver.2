@@ -154,13 +154,16 @@
      <Compile Include="Assets\GoogleVR\Scripts\Utilities\GvrUIHelpers.cs" />
      <Compile Include="Assets\GoogleVR\Scripts\Utilities\GvrVRHelpers.cs" />
      <Compile Include="Assets\GoogleVR\Scripts\Video\GvrVideoPlayerTexture.cs" />
+     <Compile Include="Assets\Keypad\Script\Playsound.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\Gazer.cs" />
      <Compile Include="Assets\Scripts\InteractiveCanvas.cs" />
      <Compile Include="Assets\Scripts\InteractiveObject.cs" />
+     <Compile Include="Assets\Scripts\KeypadCanvas.cs" />
      <Compile Include="Assets\Scripts\RaycastObject.cs" />
      <Compile Include="Assets\Scripts\Reticle.cs" />
      <None Include="Assets\GoogleVR\Shaders\GvrUIOverlayFont.shader" />
+     <None Include="Assets\Text\keypad example.txt" />
      <None Include="Assets\Text\book example.txt" />
      <None Include="Assets\Text\book content.txt" />
      <None Include="Assets\GoogleVR\Shaders\GvrAdditiveOverlay.shader" />

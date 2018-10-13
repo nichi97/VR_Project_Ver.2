@@ -112,14 +112,12 @@ public class Gazer : MonoBehaviour {
 
             else if (lastRaycastObject != null)
             {
-                Debug.LogFormat("checkpoint1");
                 lastRaycastObject.OnRaycastExit();
                 lastRaycastObject = null;
             }
         }
         else if (lastRaycastObject != null)
         {
-            Debug.LogFormat("checkpoint2");
             lastRaycastObject.OnRaycastExit();
             lastRaycastObject = null;
         }

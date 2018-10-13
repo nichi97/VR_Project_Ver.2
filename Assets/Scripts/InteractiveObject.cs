@@ -5,6 +5,18 @@ using UnityEngine;
 public class InteractiveObject : RaycastObject {
 
     public TextAsset interactiveTextFile;
+    private GameObject keypadCanvas;
+
+    public override void  Start()
+    {
+        base.Start();
+
+        if (this.transform.Find("KeypadCanvas") != null)
+        {
+            keypadCanvas = this.transform.Find("KeypadCanvas").gameObject;
+            keypadCanvas.SetActive(false);
+        }
+    }
 
     public override void buttonClicked()
     {
@@ -19,11 +31,18 @@ public class InteractiveObject : RaycastObject {
             {
                 TurnOffMessage();
                 resetAll();
-                
 
-                GameObject.Find("Player").GetComponent<GameMaster>().enableInteractiveCanvas(interactiveTextFile);
-               
-            }
+                if (interactiveTextFile != null)
+                    GameObject.Find("Player").GetComponent<GameMaster>().enableInteractiveCanvas(interactiveTextFile);
+                else if (keypadCanvas != null)
+                {
+                    GameObject.Find("Player").GetComponent<GameMaster>().enableKeypadCanvas(keypadCanvas);
+                }
+                else
+                { 
+                    Debug.LogError("Make keypad canvas active, or check its checkbox!!!!!");
+                }
+             }
         }
     }
 }

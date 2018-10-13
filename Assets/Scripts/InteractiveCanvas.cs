@@ -87,6 +87,7 @@ public class InteractiveCanvas : MonoBehaviour {
 
         if (currentPage < textLines.Length - 1)
         {
+            GetComponent<AudioSource>().Play();
             currentPage++;
             textField.text = textLines[currentPage];
         }

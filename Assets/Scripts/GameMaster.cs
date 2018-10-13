@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameMaster : MonoBehaviour {
 
     public GameObject interactiveCanvas;
+    private int currentRoom;
 
     //gazer related
     public Gazer gazer;
@@ -20,6 +21,8 @@ public class GameMaster : MonoBehaviour {
             Debug.LogError("Make interactive canvas active, or check its checkbox!!!!!");
         interactiveCanvas = GameObject.Find("InteractiveCanvas").gameObject;
         disableInteractiveCanvas();
+
+        currentRoom = 0;
     }
 	
 	// Update is called once per frame
@@ -49,4 +52,33 @@ public class GameMaster : MonoBehaviour {
 
         interactiveCanvas.SetActive(false);
     }
+
+    public void enableKeypadCanvas(GameObject keypadCanvas)
+    {
+        //disable gazer only (excluding reticle)
+        gazer.enabled = false;
+
+        keypadCanvas.SetActive(true);
+    }
+
+    public void disableKeypadCanvas(GameObject keypadCanvas)
+    {
+        //enable gazer
+        gazer.enabled = true;
+
+        keypadCanvas.SetActive(false);
+    }
+
+    public void changeRoom()
+    {
+        GetComponent<AudioSource>().Play();
+
+        currentRoom++;
+        if (currentRoom == 1)
+        {
+            this.transform.position = new Vector3(10, 11, 0); //Vector3(x, ,y, z)
+        }
+
+    }
+
 }
