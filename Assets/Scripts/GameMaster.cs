@@ -5,11 +5,12 @@ using UnityEngine;
 public class GameMaster : MonoBehaviour {
 
     public GameObject interactiveCanvas;
+    
     private int currentRoom;
 
     //gazer related
-    public Gazer gazer;
-    public MeshRenderer reticle;
+    private Gazer gazer;
+    private MeshRenderer reticle;
 
     // Use this for initialization
     void Start () {
@@ -17,9 +18,10 @@ public class GameMaster : MonoBehaviour {
         gazer = GameObject.Find("Main Camera").GetComponent<Gazer>();
         reticle = GameObject.Find("GvrReticlePointer").GetComponent<MeshRenderer>();
 
-        if (GameObject.Find("InteractiveCanvas") == null)
+        //if (GameObject.Find("InteractiveCanvas") == null)
+        if (interactiveCanvas == null)
             Debug.LogError("Make interactive canvas active, or check its checkbox!!!!!");
-        interactiveCanvas = GameObject.Find("InteractiveCanvas").gameObject;
+        //interactiveCanvas = GameObject.Find("InteractiveCanvas").gameObject;
         disableInteractiveCanvas();
 
         currentRoom = 0;

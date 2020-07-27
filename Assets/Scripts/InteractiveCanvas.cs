@@ -5,17 +5,16 @@ using UnityEngine.UI;
 
 public class InteractiveCanvas : MonoBehaviour {
 
-    public GameObject textBox;
-    public Text textField; //will be initialized in GameMaster
-    public string[] textLines; //will be set in GameMaster
-    public int currentPage;
-    public bool closing; //indicator of whether the animation should be opening or closing
-
+    private GameObject textBox;
+    private Text textField; //will be initialized in GameMaster
     private RectTransform rtPanel, rtText;
     private float textHeight;
 
-    //game master
-    public GameMaster gm;
+    private string[] textLines; //will be set in GameMaster
+    private int currentPage;
+    private bool closing; //indicator of whether the animation should be opening or closing
+
+    private GameMaster gm;
 
     // Use this for initialization
     void Start()

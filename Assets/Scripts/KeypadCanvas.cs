@@ -5,10 +5,9 @@ using UnityEngine;
 public class KeypadCanvas : MonoBehaviour {
 
     public string ANSWER;
+    
     private string input;
-
-    //game master
-    public GameMaster gm;
+    private GameMaster gm;
 
     // Use this before initialization
     void Awake() {

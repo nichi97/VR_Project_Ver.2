@@ -3,14 +3,14 @@ using UnityEngine.UI;
 
 public class RaycastObject : MonoBehaviour {
 
-    //for hintBox
+    // HintBox related
     protected GameObject canvas;
     protected CanvasGroup cg;
     protected bool messageOn;
     public bool haveSeenMsg;
     public float hitTimeLength;
 
-    //for textField
+    // TextField related
     public GameObject textBox;
     public Text textField;
     public string[] textLines;
@@ -18,40 +18,16 @@ public class RaycastObject : MonoBehaviour {
     [SerializeField]
     public TextAsset textFile;
 
-    //for raycast
-    public void OnRaycastEnter(RaycastHit hitInfo)
-    {
-		hitTimeLength = 0;
-    }
-    //for raycast
-    public void OnRayCast(RaycastHit hitInfo)
-    {   
-		if (canvas.activeInHierarchy) //if the hintbox is disappearing
-			TurnOnMessage();
-		else {
-			hitTimeLength += Time.deltaTime;
-			if ((!haveSeenMsg && hitTimeLength >= 2.5)
-			   || (haveSeenMsg && hitTimeLength >= 1)) {
-				/*		if (this is InteractiveRaycastObject
-				&& ((InteractiveRaycastObject)this).getInInteraction()) 
-			{
-				isGazing = false;      
-			}
-			else
-	*/
-				TurnOnMessage();
-			}
-		}
-    }
-    //for raycast
-    public void OnRaycastExit()
-    {
-        TurnOffMessage();
-    }
+    // Constants
+    private const double GAZING_FIRST_TIME_DURATION = 2.0; 
+    private const double GAZING_AGAIN_DURATION = 1.0; 
 
+    protected GameMaster gm;
 
     public virtual void Start()
     {
+        gm = GameObject.Find("Player").GetComponent<GameMaster>();
+
 		//for hintBox
 		canvas = this.transform.Find("HintCanvas").gameObject;
         cg = canvas.GetComponent<CanvasGroup>();
@@ -65,8 +41,66 @@ public class RaycastObject : MonoBehaviour {
 
         resetAll();
     }
+    
+    protected void Update()
+    {
+        //update nothing if the hintbox is not shown
+        if (!canvas.activeInHierarchy) 
+            return;
 
-    //helper
+        //otherwise, if hintbox is shown
+        if (messageOn && cg.alpha < 1) //appearing
+            cg.alpha += Time.deltaTime * 1.5f;
+        else if (!messageOn && cg.alpha > 0) //disappearing
+        {
+            if (cg.alpha > 0.9)
+                cg.alpha -= Time.deltaTime * 0.075f;
+            else
+                cg.alpha -= Time.deltaTime * 1.5f;
+        }
+
+        if (cg.alpha <= 0) //disappeared
+        {
+            resetAll();
+        }
+    }
+
+    /* Raycast related */
+
+    public void OnRaycastEnter(RaycastHit hitInfo)
+    {
+		hitTimeLength = 0;
+    }
+    
+    public void OnRayCast(RaycastHit hitInfo)
+    {   
+		if (canvas.activeInHierarchy) //if the hintbox is disappearing
+			TurnOnMessage();
+		else {
+			hitTimeLength += Time.deltaTime;
+			if ((!haveSeenMsg && hitTimeLength >= GAZING_FIRST_TIME_DURATION)
+			   || (haveSeenMsg && hitTimeLength >= GAZING_AGAIN_DURATION)) {
+				/*		if (this is InteractiveRaycastObject
+				&& ((InteractiveRaycastObject)this).getInInteraction()) 
+			{
+				isGazing = false;      
+			}
+			else
+	*/
+				TurnOnMessage();
+			}
+		}
+    }
+
+    public void OnRaycastExit()
+    {
+        TurnOffMessage();
+    }
+
+    /* End of raycast related */
+
+    /* Helpers */
+
     public void resetAll()
     {
         //reset text
@@ -91,29 +125,6 @@ public class RaycastObject : MonoBehaviour {
     public void TurnOffMessage()
     {
         messageOn = false;
-    }
-
-    protected void Update()
-    {
-        //update nothing if the hintbox is not shown
-        if (!canvas.activeInHierarchy) 
-            return;
-
-        //otherwise, if hintbox is shown
-        if (messageOn && cg.alpha < 1) //appearing
-            cg.alpha += Time.deltaTime * 1.5f;
-        else if (!messageOn && cg.alpha > 0) //disappearing
-        {
-            if (cg.alpha > 0.9)
-                cg.alpha -= Time.deltaTime * 0.075f;
-            else
-                cg.alpha -= Time.deltaTime * 1.5f;
-        }
-
-        if (cg.alpha <= 0) //disappeared
-        {
-            resetAll();
-        }
     }
 
     public virtual void buttonClicked()

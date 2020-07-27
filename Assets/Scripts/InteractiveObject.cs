@@ -32,14 +32,11 @@ public class InteractiveObject : RaycastObject {
                 TurnOffMessage();
                 resetAll();
 
-                if (interactiveTextFile != null)
-                    GameObject.Find("Player").GetComponent<GameMaster>().enableInteractiveCanvas(interactiveTextFile);
-                else if (keypadCanvas != null)
-                {
-                    GameObject.Find("Player").GetComponent<GameMaster>().enableKeypadCanvas(keypadCanvas);
-                }
-                else
-                { 
+                if (interactiveTextFile != null) {
+                    gm.enableInteractiveCanvas(interactiveTextFile);
+                } else if (keypadCanvas != null) {
+                    gm.enableKeypadCanvas(keypadCanvas);
+                } else { 
                     Debug.LogError("Make keypad canvas active, or check its checkbox!!!!!");
                 }
              }
