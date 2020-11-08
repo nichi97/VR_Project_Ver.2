@@ -5,20 +5,19 @@ using UnityEngine;
 public class KeypadCanvas : MonoBehaviour {
 
     public string ANSWER;
+    public DoorObject door;
     
     private string input;
     private GameMaster gm;
+    private AudioSource audioSource;
 
     // Use this before initialization
     void Awake() {
         input = "";
-        gm = GameObject.Find("Player").GetComponent<GameMaster>();
+
+        initGMIfNeeded();
+        audioSource = GetComponent<AudioSource>();
     }
-	
-	// Update is called once per frame
-	void Update() {
-		
-	}
 
     public void enterPasscode(char number)
     {
@@ -38,13 +37,18 @@ public class KeypadCanvas : MonoBehaviour {
 
             if (input == ANSWER)
             {
-                Debug.LogError("Correct answer");
+                Debug.Log("Correct answer");
                 closeKeypad();
-                gm.changeRoom();
+
+                if (door.isLocked()) {
+                    door.unlockDoor();
+                    door.passDoor(); // TODO for test
+                    //gm.changeRoom(); TODO make the door an interactive object
+                }
             }
             else if (input.Length == 3)
             {
-                GetComponent<AudioSource>().Play();
+                audioSource.Play(); // playing the audio for wrong answer
             }
         }
     }
@@ -52,6 +56,28 @@ public class KeypadCanvas : MonoBehaviour {
     private void closeKeypad()
     {
         input = "";
-        gm.disableKeypadCanvas(this.transform.gameObject);
+        disableKeypadCanvas();
+    }
+
+    /* Enable and disable can be called before Start/Awake, hence needs to initialize gm on need basis */
+    public void enableKeypadCanvas()
+    {
+        initGMIfNeeded();
+        gm.disableGazer();
+        this.gameObject.SetActive(true);
+    }
+
+    public void disableKeypadCanvas()
+    {
+        initGMIfNeeded();
+        gm.enableGazer();
+        this.gameObject.SetActive(false);
+    }
+    private void initGMIfNeeded()
+    {
+        if (gm == null)
+        {
+            gm = GameObject.Find("Player").GetComponent<GameMaster>();
+        }
     }
 }

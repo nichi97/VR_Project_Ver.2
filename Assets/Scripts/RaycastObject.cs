@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Unity.UNetWeaver;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class RaycastObject : MonoBehaviour {
@@ -7,16 +9,16 @@ public class RaycastObject : MonoBehaviour {
     protected GameObject canvas;
     protected CanvasGroup cg;
     protected bool messageOn;
-    public bool haveSeenMsg;
-    public float hitTimeLength;
+    private bool haveSeenMsg;
+    private float hitTimeLength;
+    private int lastSeenRoom; // used for faceToPlayer, stores which room was the player watching the canvas at last time
 
     // TextField related
-    public GameObject textBox;
-    public Text textField;
-    public string[] textLines;
-    public int currentPage;
-    [SerializeField]
-    public TextAsset textFile;
+    public TextAsset popUpTextFile;
+    protected Text textField;
+    protected string[] textLines;
+    protected int currentPage;
+
 
     // Constants
     private const double GAZING_FIRST_TIME_DURATION = 2.0; 
@@ -33,16 +35,17 @@ public class RaycastObject : MonoBehaviour {
         cg = canvas.GetComponent<CanvasGroup>();
 		messageOn = false;
         haveSeenMsg = false;
+        lastSeenRoom = -1;
 
-		//for textField
-		textBox = canvas.transform.Find("Panel").gameObject;//.getGetComponent<GameObject>();
+         //for textField
+         GameObject textBox = canvas.transform.Find("Panel").gameObject;//.getGetComponent<GameObject>();
 		textField = textBox.transform.Find("Text").gameObject.GetComponent<Text>();
-        textLines = textFile.text.Split('@'); //split to each page
+        textLines = popUpTextFile.text.Split('@'); //split to each page
 
         resetAll();
     }
     
-    protected void Update()
+    public virtual void Update()
     {
         //update nothing if the hintbox is not shown
         if (!canvas.activeInHierarchy) 
@@ -120,6 +123,8 @@ public class RaycastObject : MonoBehaviour {
         messageOn = true;
         haveSeenMsg = true;
 		canvas.SetActive(true);
+
+        faceToPlayer(canvas);
     }
 
     public void TurnOffMessage()
@@ -142,5 +147,22 @@ public class RaycastObject : MonoBehaviour {
                 currentPage = 0;
             }
         }
+    }
+
+    // bypass should be set only when it is guaranteed that getCurRoom() is equal to lastSeenRoom
+    //      so that it won't break the normal usage of the method
+    // bypass's usage is e.g. KeypadObject can bypass the first if condition to make the keypadCanvas 
+    //      face to the camera along with the keypadObject
+    protected void faceToPlayer(GameObject canvas, bool bypass = false) {
+        if (lastSeenRoom == gm.getCurRoom() && !bypass) { return; }
+
+        Vector3 from = canvas.transform.position - this.transform.position;
+        from.y = 0;
+        Vector3 to = gm.transform.position - this.transform.position;
+        to.y = 0;
+        float delta = Vector3.SignedAngle(from, to, Vector3.up);
+        canvas.transform.RotateAround(this.transform.position, Vector3.up, delta);
+
+        lastSeenRoom = gm.getCurRoom();
     }
 }

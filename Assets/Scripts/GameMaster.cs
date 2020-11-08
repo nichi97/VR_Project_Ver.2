@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class GameMaster : MonoBehaviour {
 
-    public GameObject interactiveCanvas;
+    public GameObject readingCanvas;
     
-    private int currentRoom;
+    private int curRoom;
 
     //gazer related
     private Gazer gazer;
     private MeshRenderer reticle;
+
+    public Vector3[] camPosInRoom = { 
+        new Vector3(0, 17, 0),
+        new Vector3(60, 17, -10),
+        new Vector3(60, 17, 100)
+    };
+
+    private const int MAX_ROOM_NUM = 3; 
 
     // Use this for initialization
     void Start () {
@@ -18,13 +26,9 @@ public class GameMaster : MonoBehaviour {
         gazer = GameObject.Find("Main Camera").GetComponent<Gazer>();
         reticle = GameObject.Find("GvrReticlePointer").GetComponent<MeshRenderer>();
 
-        //if (GameObject.Find("InteractiveCanvas") == null)
-        if (interactiveCanvas == null)
-            Debug.LogError("Make interactive canvas active, or check its checkbox!!!!!");
-        //interactiveCanvas = GameObject.Find("InteractiveCanvas").gameObject;
-        disableInteractiveCanvas();
-
-        currentRoom = 0;
+        //set initial position
+        curRoom = 0;
+        this.gameObject.transform.localPosition = camPosInRoom[curRoom];
     }
 	
 	// Update is called once per frame
@@ -32,55 +36,36 @@ public class GameMaster : MonoBehaviour {
 		
 	}
 
-    public void enableInteractiveCanvas(TextAsset interactiveCanvasContent)
+    public void changeRoom(int doorNum)
     {
-        //disable gazer
-        gazer.enabled = false;
-        reticle.enabled = false;
+        if (doorNum >= MAX_ROOM_NUM - 1) return;
 
-        interactiveCanvas.SetActive(true);
+        if (curRoom == doorNum) { curRoom = doorNum + 1; }
+        else if (curRoom == doorNum + 1) { curRoom = doorNum; }
+        else { Debug.LogError("Incorrect changing room behavior " + curRoom + doorNum); } //error
 
-        //set text content of interactiveCanvas
-        InteractiveCanvas ic = interactiveCanvas.GetComponent<InteractiveCanvas>();
-        ic.setTextContent(interactiveCanvasContent);
-    }
+        this.transform.position = camPosInRoom[curRoom];
 
-    //this function solely is not sufficient to disable IC, also need to reset currentPage in InteractiveCanvas
-    public void disableInteractiveCanvas()
-    {
-        //enable gazer
-        gazer.enabled = true;
-        reticle.enabled = true;
-
-        interactiveCanvas.SetActive(false);
-    }
-
-    public void enableKeypadCanvas(GameObject keypadCanvas)
-    {
-        //disable gazer only (excluding reticle)
-        gazer.enabled = false;
-
-        keypadCanvas.SetActive(true);
-    }
-
-    public void disableKeypadCanvas(GameObject keypadCanvas)
-    {
-        //enable gazer
-        gazer.enabled = true;
-
-        keypadCanvas.SetActive(false);
-    }
-
-    public void changeRoom()
-    {
-        GetComponent<AudioSource>().Play();
-
-        currentRoom++;
-        if (currentRoom == 1)
+        if (curRoom == 0)
         {
-            this.transform.position = new Vector3(10, 11, 0); //Vector3(x, ,y, z)
+            
+        }
+        else if (curRoom == 1)
+        {
+        }
+        else // curRoom == 2
+        {
+            // game clear
+            
         }
 
     }
+
+    public void enableGazer() { gazer.enabled = true; }
+    public void disableGazer() { gazer.enabled = false; }
+    public void enableReticle() { reticle.enabled = true; }
+    public void disableReticle() { reticle.enabled = false; }
+    public ReadingCanvas getReadingCanvas() { return readingCanvas.GetComponent<ReadingCanvas>(); }
+    public int getCurRoom() { return curRoom; }
 
 }
